@@ -6,7 +6,7 @@ def sigmoid(value) -> float:
 
 
 def ReLu(value) -> float:
-    return value
+    return value if value > 0 else 0
 
 
 def Tanh(value) -> float:

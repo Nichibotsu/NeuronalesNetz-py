@@ -13,7 +13,7 @@ if __name__ == '__main__':
 
     nn.createFullMesh([1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 
-
+        
     print(o1.get_Value())
 
 
