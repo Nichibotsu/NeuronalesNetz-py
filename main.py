@@ -3,6 +3,7 @@ from NN.NeuronalesNetz import neuronalesNetz
 
 if __name__ == '__main__':
     nn=neuronalesNetz()
+
     i1=nn.createInputNeuron()
     i2=nn.createInputNeuron()
     nn.createHiddenNeuron(2,3)
@@ -13,7 +14,7 @@ if __name__ == '__main__':
 
     nn.createFullMesh([1,1,1,1,1,1,1,1,1,1,1,1,1,1])
 
-        
+
     print(o1.get_Value())
 
 
