@@ -4,25 +4,52 @@ from NN.Connections import Connection
 
 
 class neuronalesNetz:
+    """
+        Eine Klasse, die ein neuronales Netzwerk repräsentiert.
+
+        :ivar inputNeuronen: Eine Liste von Input-Neuronen.
+        :ivar hiddenneuronen: Eine Liste von Listen, die die versteckten Neuronen für jede Schicht enthält.
+        :ivar outputneuronen: Eine Liste von Output-Neuronen.
+        :ivar gewichtzahl: Die Gesamtanzahl der Gewichte im Netzwerk.
+    """
     inputNeuronen: list[inputneuron] = []
     hiddenneuronen: list[list[hiddenneuron]] = []
     outputneuronen: list[hiddenneuron] = []
     gewichtzahl: int
 
     def __init__(self):
+        """
+            Initialisiert ein neuronales Netzwerk.
+        """
         pass
 
     def createInputNeuron(self) -> "inputneuron":
+        """
+            Erstellt ein Input-Neuron und fügt es zur Liste der Input-Neuronen hinzu.
+
+            :return: Das erstellte Input-Neuron.
+        """
         i1 = inputneuron()
         self.inputNeuronen.append(i1)
         return i1
 
     def createOutputNeuron(self) -> "hiddenneuron":
+        """
+            Erstellt ein Output-Neuron und fügt es zur Liste der Output-Neuronen hinzu.
+
+            :return: Das erstellte Output-Neuron.
+        """
         o1 = hiddenneuron()
         self.outputneuronen.append(o1)
         return o1
 
     def createHiddenNeuron(self, Neuronenanzahl: int, layer: int = 1) -> None:
+        """
+            Erstellt eine Schicht von versteckten Neuronen und fügt sie zur Liste der versteckten Neuronen hinzu.
+
+            :param Neuronenanzahl: Die Anzahl der versteckten Neuronen in der Schicht.
+            :param layer: Die Schichtnummer. Standardmäßig ist es die erste Schicht (layer=1).
+        """
         for i in range(layer):
             x: list[hiddenneuron] = []
 
@@ -34,6 +61,11 @@ class neuronalesNetz:
         return None
 
     def calcGewichtAnzahl(self) -> int:
+        """
+            Berechnet die Gesamtanzahl der Gewichte im neuronalen Netzwerk.
+
+            :return: Die Gesamtanzahl der Gewichte im Netzwerk.
+        """
         calcgewichte = 0
         gsize = [len(self.inputNeuronen)]
 
@@ -50,14 +82,18 @@ class neuronalesNetz:
         return self.gewichtzahl
 
     def createFullMesh(self, gewichte: list[float]) -> None:
+        """
+            Erstellt ein vollständiges Netzwerk mit den gegebenen Gewichten.
+
+            :param gewichte: Eine Liste von Gewichten für alle Verbindungen im Netzwerk.
+        """
 
         if len(self.inputNeuronen) == 0 or len(self.hiddenneuronen) == 0 or len(self.outputneuronen) == 0:
-            raise NotImplemented
+            raise NotImplemented("Das Netzwerk ist nicht vollständig initialisiert.")
 
         if self.calcGewichtAnzahl() != len(gewichte):
-            raise NotImplemented
+            raise NotImplemented("Die Anzahl der Gewichte stimmt nicht mit der erwarteten Anzahl überein.")
 
-        # Verkettetung
 
         index = 0
         for o1 in self.outputneuronen:
@@ -74,7 +110,15 @@ class neuronalesNetz:
                 index += 1
 
     def verkettungHiddens(self, gewichte: list[float], index: int, index1: int, index2: int) -> int:
+        """
+            Verkettet die versteckten Neuronen in den Schichten.
 
+            :param gewichte: Eine Liste von Gewichten für alle Verbindungen im Netzwerk.
+            :param index: Der aktuelle Index in der Liste der Gewichte.
+            :param index1: Der Index der ersten Schicht von Neuronen.
+            :param index2: Der Index der zweiten Schicht von Neuronen.
+            :return: Der aktualisierte Index in der Liste der Gewichte.
+        """
         if index1 == 0:
             return index
 
