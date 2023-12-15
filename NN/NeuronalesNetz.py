@@ -48,7 +48,7 @@ class neuronalesNetz:
             Erstellt eine Schicht von versteckten Neuronen und fügt sie zur Liste der versteckten Neuronen hinzu.
 
             :param Neuronenanzahl: Die Anzahl der versteckten Neuronen in der Schicht.
-            :param layer: Die Schichtnummer. Standardmäßig ist es die erste Schicht (layer=1).
+            :param layer: Die Schichtanzahl. Standardmäßig ist die Schichtanzahl gleich 1 (layer=1).
         """
         for i in range(layer):
             x: list[hiddenneuron] = []
