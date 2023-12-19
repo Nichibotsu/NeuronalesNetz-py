@@ -673,3 +673,12 @@ class neuronalesNetz:
         return self.verkettungHiddens(gewichte, index, index1-1, index2-1)
 
 ```
+
+# Download / View on Github
+
+https://github.com/Nichibotsu/NeuronalesNetz-py
+
+
+```python
+
+```
