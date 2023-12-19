@@ -1,4 +1,10 @@
-[TOC]
+# Kurze Theorie
+
+<img src="Bilder/Slide1.jpg" alt="image">
+
+## Beispiel
+
+<img src="Bilder/Slide2.jpg" alt="image" width="50%">
 
 # Main
 
@@ -40,6 +46,311 @@ if __name__ == '__main__':
 
     20
     
+
+# Klassen / Bauteile
+
+## Aktivierungsfunktionen
+
+
+```python
+import numpy as np
+```
+
+### sigmoid(value) -> float
+
+Berechnet die Sigmoid-Aktivierungsfunktion für einen gegebenen Wert.
+
+<figure>
+
+<img src="Bilder/Sigmoid-function-2.svg.png" alt="image" width="50%">
+<figcaption> https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sigmoid-function-2.svg/1920px-Sigmoid-function-2.svg.png</figcaption>
+</figure>
+
+
+**Parameter:**
+- `value`: Der Eingabewert für die Sigmoid-Funktion.
+
+**Rückgabe:**
+Der berechnete Sigmoid-Wert.
+
+
+```python
+def sigmoid(value) -> float:
+    sig = 1 / (1 + np.exp(-value))
+    return sig
+
+```
+
+### ReLu(value) -> float
+
+
+
+Berechnet die Rectified Linear Unit (ReLU)-Aktivierungsfunktion für einen gegebenen Wert.
+<figure>
+<img src="Bilder/220px-Activation_rectified_linear.svg.png" alt="image" width="45%">
+    <figcaption>https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Activation_rectified_linear.svg/220px-Activation_rectified_linear.svg.png</figcaption>
+</figure>
+
+**Parameter:**
+- `value`: Der Eingabewert für die ReLU-Funktion.
+
+**Rückgabe:**
+Der berechnete ReLU-Wert.
+
+
+```python
+def ReLu(value) -> float:
+    return value if value > 0 else 0
+```
+
+### Tanh(value) -> float
+
+Berechnet die Tangens hyperbolicus (Tanh)-Aktivierungsfunktion für einen gegebenen Wert.
+<figure>
+<img src="Bilder/2560px-Hyperbolic_Tangent.svg.png" alt="image" width="50%">
+    <figcaption>https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hyperbolic_Tangent.svg/2560px-Hyperbolic_Tangent.svg.png</figcaption>
+</figure>
+
+
+**Parameter:**
+- `value`: Der Eingabewert für die Tanh-Funktion.
+
+**Rückgabe:**
+Der berechnete Tanh-Wert.
+
+
+```python
+def Tanh(value) -> float:
+    tanh = 1 - (2 / (1 + np.exp(2 * value)))
+    return tanh
+```
+
+## Neuronen
+
+<p>Eine abstrakte Basisklasse für Neuronen in einem neuronalen Netzwerk.</p>
+
+<p>Alle Unterklassen müssen die Methode <code>get_Value</code> implementieren.</p>
+
+<p><strong>Methode:</strong></p>
+<p><code>get_Value</code>: Eine abstrakte Methode, die den Wert des Neurons zurückgeben soll.</p>
+
+
+```python
+class neuron:
+    
+    def get_Value(self) -> float:
+        pass
+```
+
+### InputNeuron
+
+#### __init__ (self):
+
+**Initialisierung:**
+Ein Input-Neuron wird mit einem Wert von 0 initialisiert.
+
+
+```python
+def __init__(self):
+        self.value = 0
+```
+
+#### get_value(self)-> float:
+
+  Gibt den aktuellen Wert des Input-Neurons zurück.
+
+  **Rückgabe:**
+  Der aktuelle Wert des Input-Neurons.
+
+
+```python
+def get_Value(self) -> float:
+        return self.value
+```
+
+#### set_value(value) -> None:
+
+  Setzt den Wert des Input-Neurons auf den angegebenen Wert.
+
+  **Parameter:**
+  - **value:** Der Wert, auf den das Input-Neuron gesetzt werden soll.
+
+
+```python
+def set_Value(self, value) -> None:
+        self.value = value
+        return None
+```
+
+#### Kompletter Code
+
+
+```python
+from NN.Neuron import neuron
+
+
+class inputneuron(neuron):
+    """
+        Klasse für ein Input-Neuron in einem neuronalen Netzwerk.
+
+        Vererbung: Die Klasse erbt von der allgemeinen Neuron-Klasse.
+
+        :ivar value: Der aktuelle Wert des Input-Neurons.
+    """
+    def __init__(self):
+        """
+            Initialisiert ein Input-Neuron mit einem Wert von 0.
+        """
+        self.value = 0
+
+    def get_Value(self) -> float:
+        """
+            Gibt den aktuellen Wert des Input-Neurons zurück.
+
+            :return: Der aktuelle Wert des Input-Neurons.
+        """
+        return self.value
+
+    def set_Value(self, value) -> None:
+        """
+            Setzt den Wert des Input-Neurons auf den angegebenen Wert.
+            :param value: Der Wert, auf den das Input-Neuron gesetzt werden soll.
+        """
+        self.value = value
+        return None
+
+```
+
+### HiddenNeuron
+
+#### __init__ (self):
+
+**Initialisierung:**
+Ein verstecktes Neuron wird mit einer leeren Liste von Verbindungen und einem Wert von 0 initialisiert.
+
+
+```python
+def __init__(self):
+        self.Connections: list[Connection] = []
+        self.value: float = 0
+```
+
+#### get_Value(self)-> float:
+
+
+  Berechnet den Wert des Neurons nach der Aktivierungsfunktion (hier ReLU).
+
+  **Rückgabe:**
+  Der aktuelle Wert des Neurons nach der Aktivierungsfunktion.
+
+
+```python
+def get_Value(self) -> float:
+        value_sum = 0
+        for c in self.Connections:
+            value_sum += c.getValue()
+
+        self.value = ReLu(value_sum)
+        return self.value
+```
+
+#### addConnection(self, c: Connection)->None
+
+  Fügt eine Verbindung zu anderen Neuronen hinzu.
+
+  **Parameter:**
+  - **c:** Die hinzuzufügende Verbindung.
+
+
+```python
+def addConnection(self, c: Connection) -> None:
+        self.Connections.append(c)
+        return None
+```
+
+#### kompletter Code
+
+
+```python
+from NN.Neuron import neuron
+from NN.Connections import Connection
+from NN.Aktivierung import *
+
+
+class hiddenneuron(neuron):
+    """
+        Klasse für ein verstecktes Neuron in einem neuronalen Netzwerk.
+
+        Vererbung: Die Klasse erbt von der allgemeinen Neuron-Klasse.
+
+        :ivar Connections: Eine Liste von Verbindungen zu anderen Neuronen.
+        :ivar value: Der aktuelle Wert des Neurons nach der Aktivierungsfunktion.
+    """
+
+    def __init__(self):
+        """
+            Initialisiert ein verstecktes Neuron mit einer leeren Liste von Verbindungen und einem Wert von 0.
+        """
+        self.Connections: list[Connection] = []
+        self.value: float = 0
+
+    def get_Value(self) -> float:
+        """
+            Berechnet den Wert des Neurons nach der Aktivierungsfunktion (hier ReLU).
+
+            :return: Der aktuelle Wert des Neurons.
+        """
+        value_sum = 0
+        for c in self.Connections:
+            value_sum += c.getValue()
+
+        self.value = ReLu(value_sum)
+        return self.value
+
+    def addConnection(self, c: Connection) -> None:
+        """
+            Fügt eine Verbindung zu anderen Neuronen hinzu.
+
+            :param c: Die hinzuzufügende Verbindung.
+        """
+        self.Connections.append(c)
+        return None
+
+```
+
+## Connections
+
+<p>Eine Verbindung zwischen zwei Neuronen mit einem bestimmten Gewicht.</p>
+
+<h3>__init__(self,neuron1: "neuron", gewicht: float)</h3>
+<p>Initialisiert eine Verbindung mit einem Neuron und einem Gewicht.</p>
+
+<p><strong>Parameter:</strong></p>
+    
+<ul>
+        <li><code>neuron1</code>: Das verknüpfte Neuron.</li>
+        <li><code>gewicht</code>: Das Gewicht der Verbindung.</li>
+    </ul>
+
+<h3> getValue(self)->float</h3>
+<p>Berechnet den Wert der Verbindung, indem der Wert des verknüpften Neurons mit dem Gewicht multipliziert wird.</p>
+  <p><strong>Rückgabe:</strong></p   <p>Der berechnete Wert der Verbindung.</p>
+
+
+```python
+from NN.Neuron import neuron
+
+
+class Connection:
+
+    def __init__(self, neuron1: "neuron", gewicht: float):
+        self.gewicht = gewicht
+        self.neuron = neuron1
+
+    def getValue(self) -> float:
+        return self.neuron.get_Value() * self.gewicht
+
+```
 
 # Neuronales Netz
 
@@ -360,310 +671,5 @@ class neuronalesNetz:
                 index += 1
 
         return self.verkettungHiddens(gewichte, index, index1-1, index2-1)
-
-```
-
-# Klassen / Bauteile
-
-## Aktivierungsfunktionen
-
-
-```python
-import numpy as np
-```
-
-### sigmoid(value) -> float
-
-Berechnet die Sigmoid-Aktivierungsfunktion für einen gegebenen Wert.
-
-<figure>
-
-<img src="Bilder/Sigmoid-function-2.svg.png" alt="image" width="50%">
-<figcaption> https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Sigmoid-function-2.svg/1920px-Sigmoid-function-2.svg.png</figcaption>
-</figure>
-
-
-**Parameter:**
-- `value`: Der Eingabewert für die Sigmoid-Funktion.
-
-**Rückgabe:**
-Der berechnete Sigmoid-Wert.
-
-
-```python
-def sigmoid(value) -> float:
-    sig = 1 / (1 + np.exp(-value))
-    return sig
-
-```
-
-### ReLu(value) -> float
-
-
-
-Berechnet die Rectified Linear Unit (ReLU)-Aktivierungsfunktion für einen gegebenen Wert.
-<figure>
-<img src="Bilder/220px-Activation_rectified_linear.svg.png" alt="image" width="45%">
-    <figcaption>https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Activation_rectified_linear.svg/220px-Activation_rectified_linear.svg.png</figcaption>
-</figure>
-
-**Parameter:**
-- `value`: Der Eingabewert für die ReLU-Funktion.
-
-**Rückgabe:**
-Der berechnete ReLU-Wert.
-
-
-```python
-def ReLu(value) -> float:
-    return value if value > 0 else 0
-```
-
-### Tanh(value) -> float
-
-Berechnet die Tangens hyperbolicus (Tanh)-Aktivierungsfunktion für einen gegebenen Wert.
-<figure>
-<img src="Bilder/2560px-Hyperbolic_Tangent.svg.png" alt="image" width="50%">
-    <figcaption>https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Hyperbolic_Tangent.svg/2560px-Hyperbolic_Tangent.svg.png</figcaption>
-</figure>
-
-
-**Parameter:**
-- `value`: Der Eingabewert für die Tanh-Funktion.
-
-**Rückgabe:**
-Der berechnete Tanh-Wert.
-
-
-```python
-def Tanh(value) -> float:
-    tanh = 1 - (2 / (1 + np.exp(2 * value)))
-    return tanh
-```
-
-## Neuronen
-
-<p>Eine abstrakte Basisklasse für Neuronen in einem neuronalen Netzwerk.</p>
-
-<p>Alle Unterklassen müssen die Methode <code>get_Value</code> implementieren.</p>
-
-<p><strong>Methode:</strong></p>
-<p><code>get_Value</code>: Eine abstrakte Methode, die den Wert des Neurons zurückgeben soll.</p>
-
-
-```python
-class neuron:
-    
-    def get_Value(self) -> float:
-        pass
-```
-
-### InputNeuron
-
-#### __init__ (self):
-
-**Initialisierung:**
-Ein Input-Neuron wird mit einem Wert von 0 initialisiert.
-
-
-```python
-def __init__(self):
-        self.value = 0
-```
-
-#### get_value(self)-> float:
-
-  Gibt den aktuellen Wert des Input-Neurons zurück.
-
-  **Rückgabe:**
-  Der aktuelle Wert des Input-Neurons.
-
-
-```python
-def get_Value(self) -> float:
-        return self.value
-```
-
-#### set_value(value) -> None:
-
-  Setzt den Wert des Input-Neurons auf den angegebenen Wert.
-
-  **Parameter:**
-  - **value:** Der Wert, auf den das Input-Neuron gesetzt werden soll.
-
-
-```python
-def set_Value(self, value) -> None:
-        self.value = value
-        return None
-```
-
-#### Kompletter Code
-
-
-```python
-from NN.Neuron import neuron
-
-
-class inputneuron(neuron):
-    """
-        Klasse für ein Input-Neuron in einem neuronalen Netzwerk.
-
-        Vererbung: Die Klasse erbt von der allgemeinen Neuron-Klasse.
-
-        :ivar value: Der aktuelle Wert des Input-Neurons.
-    """
-    def __init__(self):
-        """
-            Initialisiert ein Input-Neuron mit einem Wert von 0.
-        """
-        self.value = 0
-
-    def get_Value(self) -> float:
-        """
-            Gibt den aktuellen Wert des Input-Neurons zurück.
-
-            :return: Der aktuelle Wert des Input-Neurons.
-        """
-        return self.value
-
-    def set_Value(self, value) -> None:
-        """
-            Setzt den Wert des Input-Neurons auf den angegebenen Wert.
-            :param value: Der Wert, auf den das Input-Neuron gesetzt werden soll.
-        """
-        self.value = value
-        return None
-
-```
-
-### HiddenNeuron
-
-#### __init__ (self):
-
-**Initialisierung:**
-Ein verstecktes Neuron wird mit einer leeren Liste von Verbindungen und einem Wert von 0 initialisiert.
-
-
-```python
-def __init__(self):
-        self.Connections: list[Connection] = []
-        self.value: float = 0
-```
-
-#### get_Value(self)-> float:
-
-
-  Berechnet den Wert des Neurons nach der Aktivierungsfunktion (hier ReLU).
-
-  **Rückgabe:**
-  Der aktuelle Wert des Neurons nach der Aktivierungsfunktion.
-
-
-```python
-def get_Value(self) -> float:
-        value_sum = 0
-        for c in self.Connections:
-            value_sum += c.getValue()
-
-        self.value = ReLu(value_sum)
-        return self.value
-```
-
-#### addConnection(self, c: Connection)->None
-
-  Fügt eine Verbindung zu anderen Neuronen hinzu.
-
-  **Parameter:**
-  - **c:** Die hinzuzufügende Verbindung.
-
-
-```python
-def addConnection(self, c: Connection) -> None:
-        self.Connections.append(c)
-        return None
-```
-
-#### kompletter Code
-
-
-```python
-from NN.Neuron import neuron
-from NN.Connections import Connection
-from NN.Aktivierung import *
-
-
-class hiddenneuron(neuron):
-    """
-        Klasse für ein verstecktes Neuron in einem neuronalen Netzwerk.
-
-        Vererbung: Die Klasse erbt von der allgemeinen Neuron-Klasse.
-
-        :ivar Connections: Eine Liste von Verbindungen zu anderen Neuronen.
-        :ivar value: Der aktuelle Wert des Neurons nach der Aktivierungsfunktion.
-    """
-
-    def __init__(self):
-        """
-            Initialisiert ein verstecktes Neuron mit einer leeren Liste von Verbindungen und einem Wert von 0.
-        """
-        self.Connections: list[Connection] = []
-        self.value: float = 0
-
-    def get_Value(self) -> float:
-        """
-            Berechnet den Wert des Neurons nach der Aktivierungsfunktion (hier ReLU).
-
-            :return: Der aktuelle Wert des Neurons.
-        """
-        value_sum = 0
-        for c in self.Connections:
-            value_sum += c.getValue()
-
-        self.value = ReLu(value_sum)
-        return self.value
-
-    def addConnection(self, c: Connection) -> None:
-        """
-            Fügt eine Verbindung zu anderen Neuronen hinzu.
-
-            :param c: Die hinzuzufügende Verbindung.
-        """
-        self.Connections.append(c)
-        return None
-
-```
-
-## Connections
-
-<p>Eine Verbindung zwischen zwei Neuronen mit einem bestimmten Gewicht.</p>
-
-<h3>__init__(self,neuron1: "neuron", gewicht: float)</h3>
-<p>Initialisiert eine Verbindung mit einem Neuron und einem Gewicht.</p>
-
-<p><strong>Parameter:</strong></p>
-    
-<ul>
-        <li><code>neuron1</code>: Das verknüpfte Neuron.</li>
-        <li><code>gewicht</code>: Das Gewicht der Verbindung.</li>
-    </ul>
-
-<h3> getValue(self)->float</h3>
-<p>Berechnet den Wert der Verbindung, indem der Wert des verknüpften Neurons mit dem Gewicht multipliziert wird.</p>
-  <p><strong>Rückgabe:</strong></p   <p>Der berechnete Wert der Verbindung.</p>
-
-
-```python
-from NN.Neuron import neuron
-
-
-class Connection:
-
-    def __init__(self, neuron1: "neuron", gewicht: float):
-        self.gewicht = gewicht
-        self.neuron = neuron1
-
-    def getValue(self) -> float:
-        return self.neuron.get_Value() * self.gewicht
 
 ```
